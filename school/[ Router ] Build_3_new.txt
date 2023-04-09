@@ -1,0 +1,256 @@
+[ Router ] Build_3
+
+int f0/0
+no shut
+
+interface fastEthernet 0/0.2
+encapsulation dot1Q 2
+ip address 192.168.0.1 255.255.255.128
+no shutdown
+
+interface fastEthernet 0/0.14
+encapsulation dot1Q 14
+ip address 192.168.1.49 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.15
+encapsulation dot1Q 15
+ip address 192.168.1.65 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.5
+encapsulation dot1Q 5
+ip address 192.168.0.161 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.6
+encapsulation dot1Q 6
+ip address 192.168.0.177 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.24
+encapsulation dot1Q 24
+ip address 192.168.1.177 255.255.255.248
+no shutdown
+
+ip dhcp pool vlan2
+network 192.168.0.0 255.255.255.128
+default-router 192.168.0.1
+exit
+ip dhcp excluded-address 192.168.0.1 192.168.0.2
+
+ip dhcp pool vlan14
+network 192.168.1.48 255.255.255.240
+default-router 192.168.1.49
+exit
+ip dhcp excluded-address 192.168.1.49
+
+ip dhcp pool vlan15
+network 192.168.1.64 255.255.255.240
+default-router 192.168.1.65
+exit
+ip dhcp excluded-address 192.168.1.65
+
+ip dhcp pool vlan5
+network 192.168.0.160 255.255.255.240
+default-router 192.168.0.161
+exit
+ip dhcp excluded-address 192.168.0.161 192.168.0.164
+
+ip dhcp pool vlan6
+network 192.168.0.176 255.255.255.240
+default-router 192.168.0.177
+exit
+ip dhcp excluded-address 192.168.0.177 192.168.0.178
+
+ip dhcp pool vlan24
+network 192.168.1.176 255.255.255.240
+default-router 192.168.1.177
+exit
+ip dhcp excluded-address 192.168.0.177
+
+
+******************** dynamic protocol RIP ******************
+
+
+int s2/0
+ip addr 192.168.1.186 255.255.255.252
+no sh
+
+int s3/0
+ip addr 192.168.1.210 255.255.255.252
+no sh
+
+router rip
+version 2
+no auto
+network 192.168.1.184
+network 192.168.1.144
+
+no network 192.168.0.0
+no network 192.168.1.48
+no network 192.168.1.64
+no network 192.168.0.128
+
+network 192.168.0.0
+network 192.168.1.48
+network 192.168.1.64
+network 192.168.0.160
+network 192.168.0.176
+network 192.168.1.177
+
+*************************************************************
+
+
+*********************** DCHP relay **********************
+
+interface fastEthernet 0/0.2
+ip helper-address 192.168.1.185
+
+interface fastEthernet 0/0.14
+ip helper-address 192.168.1.185
+
+interface fastEthernet 0/0.15
+ip helper-address 192.168.1.185
+
+interface fastEthernet 0/0.5
+ip helper-address 192.168.1.185
+
+interface fastEthernet 0/0.6
+ip helper-address 192.168.1.185
+
+interface fastEthernet 0/0.24
+ip helper-address 192.168.1.185
+
+********************************************************
+
+-------------------------------------------------------------
+[ Switch ] Switch_Build_3
+
+vtp version 2
+vtp domain VTP_Build_3
+vtp password build3vtp
+vtp mode server
+
+vlan 2
+name computer
+
+vlan 14
+name primary-school 
+
+vlan 15
+name secondary-school
+
+vlan 5
+name student-admin
+
+vlan 6
+name teacher-home
+
+vlan 24
+name name nursing-room
+
+int range fastEthernet 0/1-7
+sw m tr
+
+--------------------------------------------------------------
+[ Switch ] Switch_Build_3_1
+
+vtp version 2
+vtp domain VTP_Build_3
+vtp password build3vtp
+vtp mode client
+
+int f0/1
+sw m tr
+
+int range f0/2-22
+sw m ac
+sw ac vlan 2
+
+--------------------------------------------------------------
+[ Switch ] Switch_Build_3_2
+
+vtp version 2
+vtp domain VTP_Build_3
+vtp password build3vtp
+vtp mode client
+
+int f0/1
+sw m tr
+
+int range f0/2-22
+sw m ac
+sw ac vlan 2
+
+----------------------------------------------------------
+[ Switch ] Switch_Build_3_3
+
+vtp version 2
+vtp domain VTP_Build_3
+vtp password build3vtp
+vtp mode client
+
+int f0/1
+sw m tr
+
+int range f0/2-22
+sw m ac
+sw ac vlan 2
+
+--------------------------------------------------------------
+[ Switch ] Switch_Build_3_4
+vtp version 2
+vtp domain VTP_Build_3
+vtp password build3vtp
+vtp mode client
+
+int f0/1
+sw m tr
+
+int f0/2
+sw m ac
+sw ac vlan 14
+
+--------------------------------------------------------------
+[ Switch ] Switch_Build_3_5
+
+vtp version 2
+vtp domain VTP_Build_3
+vtp password build3vtp
+vtp mode client
+
+int f0/1
+sw m tr
+
+int f0/2
+sw m ac
+sw ac vlan 15
+--------------------------------------------------------------
+[ Switch ] Switch_Build_3_6
+
+vtp version 2
+vtp domain VTP_Build_3
+vtp password build3vtp
+vtp mode client
+
+int f0/1
+sw m tr
+
+int range f0/2-7
+sw m ac
+sw ac vlan 2
+
+int range f0/8-13
+sw m ac
+sw ac vlan 6
+
+int range f0/14-19
+sw m ac
+sw ac vlan 5
+
+int range f0/20-21
+sw m ac
+sw ac vlan 24
+
+--------------------------------------------------------------

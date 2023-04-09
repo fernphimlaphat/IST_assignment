@@ -1,0 +1,217 @@
+[ Router ] Build_1
+
+int f0/0
+no shut
+
+interface fastEthernet 0/0.8
+encapsulation dot1Q 8
+ip address 192.168.0.209 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.9
+encapsulation dot1Q 9
+ip address 192.168.0.225 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.10
+encapsulation dot1Q 10
+ip address 192.168.0.241 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.11
+encapsulation dot1Q 11
+ip address 192.168.1.1 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.12
+encapsulation dot1Q 12
+ip address 192.168.1.17 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.13
+encapsulation dot1Q 13
+ip address 192.168.1.33 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.4
+encapsulation dot1Q 4
+ip address 192.168.0.145 255.255.255.240
+no shutdown
+
+interface fastEthernet 0/0.22
+encapsulation dot1Q 22
+ip address 192.168.1.161 255.255.255.248
+no shutdown
+
+******************** dynamic protocol IEGRP ******************
+
+
+int s2/0
+ip addr  192.168.1.185 255.255.255.252
+clock rate 56000
+no sh
+
+router eigrp 1
+eigrp router-id 1.1.1.1
+no auto 
+network 192.168.1.16 0.0.0.15
+network 192.168.1.0 0.0.0.15
+network 192.168.1.32 0.0.0.15
+
+network 192.168.1.128 0.0.0.7
+network 192.168.1.160 0.0.0.7
+network 192.168.1.176 0.0.0.7
+
+network 192.168.0.144 0.0.0.15
+network 192.168.0.208 0.0.0.15
+network 192.168.0.224 0.0.0.15
+network 192.168.0.240 0.0.0.15
+network 192.168.1.192 0.0.0.3
+
+exit
+
+
+*************************************************************
+
+
+*********************** DCHP relay **********************
+
+interface fastEthernet 0/0.8
+ip helper-address 192.168.1.190
+
+interface fastEthernet 0/0.9
+ip helper-address 192.168.1.190
+
+interface fastEthernet 0/0.10
+ip helper-address 192.168.1.190
+
+interface fastEthernet 0/0.11
+ip helper-address 192.168.1.190
+
+interface fastEthernet 0/0.12
+ip helper-address 192.168.1.190
+
+interface fastEthernet 0/0.13
+ip helper-address 192.168.1.190
+
+interface fastEthernet 0/0.4
+ip helper-address 192.168.1.190
+
+interface fastEthernet 0/0.22
+ip helper-address 192.168.1.190
+
+********************************************************
+-------------------------------------------------------------
+[ Switch ] Switch_Build_1
+
+vtp version 2
+vtp domain VTP_Build_1
+vtp password build1vtp
+vtp mode server
+
+vlan 8
+name art
+
+vlan 9
+name social-education
+
+vlan 10
+name health-education
+
+vlan 11
+name eng-education
+
+vlan 12
+name guidance
+
+vlan 13
+name thai-education
+
+vlan 4
+name library
+
+vlan 22
+name meeting
+
+
+int range fastEthernet 0/1-5
+sw m tr
+--------------------------------------------------------------
+[ Switch ] Switch_Build_1_1
+
+vtp version 2
+vtp domain VTP_Build_1
+vtp password build1vtp
+vtp mode client
+
+int f0/2
+sw m ac
+sw ac vlan 22
+--------------------------------------------------------------
+[ Switch ] Switch_Build_1_2
+
+vtp version 2
+vtp domain VTP_Build_1
+vtp password build1vtp
+vtp mode client
+
+
+int range f0/2-7
+sw m ac
+sw ac vlan 8
+
+int range f0/8-13
+sw m ac
+sw ac vlan 9
+
+int range f0/14-19
+sw m ac
+sw ac vlan 10
+
+----------------------------------------------------------
+[ Switch ] Switch_Build_1_3
+
+vtp version 2
+vtp domain VTP_Build_1
+vtp password build1vtp
+vtp mode client
+
+int range f0/2-7
+sw m ac
+sw ac vlan 11
+
+int range f0/8-13
+sw m ac
+sw ac vlan 12
+
+int range f0/14-19
+sw m ac
+sw ac vlan 13
+
+
+--------------------------------------------------------------
+[ Switch ] Switch_Build_1_4
+vtp version 2
+vtp domain VTP_Build_1
+vtp password build1vtp
+vtp mode client
+
+
+int range f0/2-3
+sw m ac
+sw ac vlan 4
+
+int range f0/4-5
+sw m ac
+sw ac vlan 22
+
+
+
+--------------------------------------------------------------
+
+
+
+interface FastEthernet0/0.4
+ encapsulation dot1Q 4
+ ip address 192.168.0.145 255.255.255.240
+ ip helper-address 192.168.1.190

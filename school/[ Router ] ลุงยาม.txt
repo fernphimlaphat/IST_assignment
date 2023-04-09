@@ -1,0 +1,49 @@
+[ Router ] ลุงยาม
+
+int s2/0
+ip addr 192.168.1.198 255.255.255.252
+no sh
+
+int s6/0
+ip addr 192.168.1.205 255.255.255.252
+clock rate 56000
+no sh
+
+
+ip route 192.168.1.200 255.255.255.252 192.168.1.197
+
+ip route 192.168.0.160 255.255.255.240 192.168.1.197
+
+ip route 192.168.1.112 255.255.255.248 192.168.1.197
+
+ip route 192.168.1.80 255.255.255.248 192.168.1.197
+
+ip route 192.168.1.120 255.255.255.248 192.168.1.197
+
+ip route 192.168.1.120 255.255.255.248 192.168.1.197
+
+ip route 192.168.1.196 255.255.255.252 192.168.1.198
+
+
+
+ยาม
+
+int f0/0
+ip helper-address 192.168.1.190
+
+bound EIGRP_Static
+int s2/0
+no ip helper-address 192.168.1.202
+int s3/0
+no ip helper-address 192.168.1.197
+
+RouterBuild_2
+int s1/0
+no ip helper-address 192.168.1.202
+int s1/1
+no ip helper-address 192.168.1.197
+int s1/2
+no ip helper-address 192.168.1.197
+
+
+192.168.0.160

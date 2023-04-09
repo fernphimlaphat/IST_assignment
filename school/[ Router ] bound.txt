@@ -1,0 +1,233 @@
+[ Router ] boundEIGRP_RIP 
+
+int s3/0
+ip addr 192.168.1.185 255.255.255.252
+clock rate 56000
+no sh
+
+router rip
+version 2
+no auto-sum
+network 192.168.1.184
+
+router eigrp 1
+eigrp router-id 3.3.3.3
+no auto
+network 192.168.1.188 0.0.0.3
+
+router rip
+version 2
+redistribute eigrp 1 metric 5
+
+router eigrp 1
+redistribute rip metric 1544 100 255 1 100
+
+****************************** DHCP *******************************
+
+ip dhcp pool vlan2_teacher-com
+network 192.168.0.0 255.255.255.128
+default-router 192.168.0.1
+exit
+ip dhcp excluded-address 192.168.0.1 192.168.0.3
+
+ip dhcp pool vlan2_teacher-com_Build3
+network 192.168.0.0 255.255.255.128
+default-router 192.168.0.2
+
+ip dhcp pool vlan3_teacher-sci
+network 192.168.0.128 255.255.255.240
+default-router 192.168.0.129
+exit
+ip dhcp excluded-address 192.168.0.129 192.168.0.130
+
+ip dhcp pool vlan4_lib
+network 192.168.0.144 255.255.255.240
+default-router 192.168.0.145
+exit
+ip dhcp excluded-address 192.168.0.145 192.168.0.146
+
+ip dhcp pool vlan5_student-admin
+network 192.168.0.160 255.255.255.240
+default-router 192.168.0.161 192.168.0.162
+exit
+ip dhcp excluded-address 192.168.0.161 192.168.0.163
+
+ip dhcp pool vlan6_teacher-home
+network 192.168.0.176 255.255.255.240
+default-router 192.168.0.177
+exit
+ip dhcp excluded-address 192.168.0.177 192.168.0.178
+
+ip dhcp pool vlan7_teacher-math
+network 192.168.0.192 255.255.255.240
+default-router 192.168.0.193
+exit
+ip dhcp excluded-address 192.168.0.193 192.168.0.194
+
+ip dhcp pool vlan8
+network 192.168.0.208 255.255.255.240
+default-router 192.168.0.209
+exit
+ip dhcp excluded-address 192.168.0.209 192.168.0.210
+
+ip dhcp pool vlan9
+network 192.168.0.224 255.255.255.240
+default-router 192.168.0.225
+exit
+ip dhcp excluded-address 192.168.0.225 192.168.0.226
+
+ip dhcp pool vlan10
+network 192.168.0.240 255.255.255.240
+default-router 192.168.0.241
+exit
+ip dhcp excluded-address 192.168.0.241 192.168.0.242
+
+ip dhcp pool vlan11
+network 192.168.1.0 255.255.255.240
+default-router 192.168.1.1
+exit
+ip dhcp excluded-address 192.168.1.1 192.168.1.2
+
+ip dhcp pool vlan12
+network 192.168.1.16 255.255.255.240
+default-router 192.168.1.17
+exit
+ip dhcp excluded-address 192.168.1.17 192.168.1.18
+
+ip dhcp pool vlan13
+network 192.168.1.32 255.255.255.240
+default-router 192.168.1.33
+exit
+ip dhcp excluded-address 192.168.1.33 192.168.1.34
+
+ip dhcp pool vlan14_primary-school
+network 192.168.1.48 255.255.255.240
+default-router 192.168.1.49
+exit
+ip dhcp excluded-address 192.168.1.49
+
+ip dhcp pool vlan15_secondary-school
+network 192.168.1.64 255.255.255.240
+default-router 192.168.1.65
+exit
+ip dhcp excluded-address 192.168.1.65
+
+ip dhcp pool vlan16_IT-support
+network 192.168.1.80 255.255.255.248
+default-router 192.168.1.81
+exit
+ip dhcp excluded-address 192.168.1.81 192.168.1.82
+
+ip dhcp pool vlan17_academic
+network 192.168.1.88 255.255.255.248
+default-router 192.168.1.89
+exit
+ip dhcp excluded-address 192.168.1.89 192.168.1.90
+
+ip dhcp pool vlan18_reg
+network 192.168.1.96 255.255.255.248
+default-router 192.168.1.97
+exit
+ip dhcp excluded-address 192.168.1.97 192.168.1.98
+
+ip dhcp pool vlan19_finance
+network 192.168.1.104 255.255.255.248
+default-router 192.168.1.105
+exit
+ip dhcp excluded-address 192.168.1.105 192.168.1.106
+
+ip dhcp pool vlan20_director
+network 192.168.1.112 255.255.255.248
+default-router 192.168.1.113
+exit
+ip dhcp excluded-address 192.168.1.113
+
+ip dhcp pool vlan21_pr
+network 192.168.1.120 255.255.255.248
+default-router 192.168.1.121
+exit
+ip dhcp excluded-address 192.168.1.121 192.168.1.122
+
+ip dhcp pool vlan22_meeting
+network 192.168.1.160 255.255.255.248
+default-router 192.168.1.161
+exit
+ip dhcp excluded-address 192.168.1.161
+
+ip dhcp pool vlan24_nursing-room
+network 192.168.1.176 255.255.255.248
+default-router 192.168.1.177
+exit
+ip dhcp excluded-address 192.168.1.177
+
+
+
+
+*******************************************************************
+
+****************************** SSH ********************************
+ip domain name DHCP
+username DHCPadmin secret ptyo4dhcp
+
+line vty 0 4
+transport input ssh 
+login local
+exit
+
+crypto key generate rsa
+1024
+
+ip ssh version 2
+*******************************************************************
+
+-------------------------------------------------------------------
+[ Router ] boundEIGRP_Static
+
+int s2/0
+ip addr 192.168.1.201 255.255.255.252
+clock rate 56000
+no sh
+
+int s3/0
+ip addr 192.168.1.197 255.255.255.252
+no sh
+
+router eigrp 1
+eigrp router-id 4.4.4.4
+network 192.168.1.200 0.0.0.3
+network 192.168.1.196 0.0.0.3
+exit
+
+ip route 192.168.1.248 255.255.255.248 192.168.1.198
+
+router eigrp 1
+redistribute static
+
+
+---------------------------------------------------------------------
+[ Router ] boundStatic_RIP
+
+int s2/0
+ip addr 192.168.1.206 255.255.255.252
+no sh
+
+int s3/0
+ip addr 192.168.1.209 255.255.255.252
+clock rate 56000
+no sh
+
+ip route 192.168.1.248 255.255.255.248 192.168.1.205
+
+router rip
+version 2
+no auto
+network 192.168.1.208
+network 192.168.1.184
+network 192.168.0.0
+network 192.168.1.48
+network 192.168.1.64
+network 192.168.0.176
+network 192.168.0.160
+network 192.168.1.176
+
+

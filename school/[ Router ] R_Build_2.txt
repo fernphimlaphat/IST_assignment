@@ -1,0 +1,192 @@
+[ Router ] R_Build_2
+
+int s1/0
+ip addr 192.168.1.189 255.255.255.252
+clock rate 56000
+no sh
+
+int s1/1
+ip addr 192.168.1.194 255.255.255.252
+no sh
+
+int s1/2
+ip addr 192.168.1.202 255.255.255.252
+no sh
+
+int f0/0.16
+encapsulation dot1Q 16
+ip addr 192.168.1.81 255.255.255.248
+no sh
+
+int f0/0.3
+encapsulation dot1Q 3
+ip addr 192.168.0.129 255.255.255.240
+no sh
+
+int f0/0.7
+encapsulation dot1Q 7
+ip addr 192.168.0.193 255.255.255.240
+no sh
+
+int f0/0.17
+encapsulation dot1Q 17
+ip addr 192.168.1.89 255.255.255.248
+no sh
+
+int f0/0.18
+encapsulation dot1Q 18
+ip addr 192.168.1.97 255.255.255.248
+no sh
+
+int f0/0.19
+encapsulation dot1Q 19
+ip addr 192.168.1.105 255.255.255.248
+no sh
+
+int f0/0.20
+encapsulation dot1Q 20
+ip addr 192.168.1.113 255.255.255.248
+no sh
+
+int f0/0.21
+encapsulation dot1Q 21
+ip addr 192.168.1.121 255.255.255.248
+no sh
+
+router eigrp 1
+eigrp router-id 2.2.2.2
+no auto
+network 192.168.1.192 0.0.0.3
+network 192.168.1.188 0.0.0.3
+network 192.168.1.200 0.0.0.3
+
+network 192.168.0.128 0.0.0.15
+network 192.168.0.192 0.0.0.15
+network 192.168.1.80 0.0.0.7
+network 192.168.1.88 0.0.0.7
+network 192.168.1.96 0.0.0.7
+network 192.168.1.104 0.0.0.15
+network 192.168.1.112 0.0.0.7
+network 192.168.1.120 0.0.0.7
+
+*********************** DCHP relay **********************
+int f0/0.16
+ip helper-address 192.168.1.190
+int f0/0.3
+ip helper-address 192.168.1.190
+int f0/0.7
+ip helper-address 192.168.1.190
+int f0/0.17
+ip helper-address 192.168.1.190
+int f0/0.18
+ip helper-address 192.168.1.190
+int f0/0.19
+ip helper-address 192.168.1.190
+int f0/0.20
+ip helper-address 192.168.1.190
+
+int f0/0.21
+ip helper-address 192.168.1.190
+
+********************************************************
+
+[ Switch ] Switch_Build_3
+
+vtp version 2
+vtp domain VTP_Build_2
+vtp password build2vtp
+vtp mode server
+
+vlan 16
+name IT-support
+
+vlan 3
+name teacher-sci
+
+vlan 7
+name teacher-math
+
+vlan 17
+name academic
+
+vlan 18
+name reg
+
+vlan 19
+name finance
+
+vlan 20
+name director
+
+vlan 21
+name pr
+
+int range fastEthernet 0/1-4
+sw m tr
+
+--------------------------------------------------------------
+[ Switch ] Switch_Build_3_1
+
+vtp version 2
+vtp domain VTP_Build_2
+vtp password build2vtp
+vtp mode client
+
+int range f0/2-5
+sw m ac
+sw ac vlan 16
+
+int range f0/6-11
+sw m ac
+sw ac vlan 3
+
+int range f0/12-17
+sw m ac
+sw ac vlan 7
+
+
+--------------------------------------------------------------
+[ Switch ] Switch_Build_3_2
+
+vtp version 2
+vtp domain VTP_Build_2
+vtp password build2vtp
+vtp mode client
+
+int f0/2
+sw m ac
+sw ac vlan 3
+
+
+
+----------------------------------------------------------
+[ Switch ] Switch_Build_3_3
+
+vtp version 2
+vtp domain VTP_Build_2
+vtp password build2vtp
+vtp mode client
+
+int f0/1
+sw m tr
+
+int range f0/2-4
+sw m ac
+sw ac vlan 18
+
+int range f0/5-7
+sw m ac
+sw ac vlan 19
+
+int range f0/8-11
+sw m ac
+sw ac vlan 17
+
+int range f0/12-13
+sw m ac
+sw ac vlan 20
+
+int range f0/14-15
+sw m ac
+sw ac vlan 21
+
